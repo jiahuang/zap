@@ -1,0 +1,43 @@
+(function (Zap) {
+  var Wire = function (comp1, comp2) {
+    this.comp1 = comp1;
+    this.comp2 = comp2;
+    this.intersections = [];
+  }
+
+  Wire.prototype.render = function (svg) {
+    // svg renderings
+    console.log("end", this.comp2.wire);
+    var startPos = this.comp1.obj[this.comp1.wire];
+    var endPos = this.comp2.obj[this.comp2.wire];
+
+    this.intersections.forEach(function (intersection, index) {
+      var nextX = intersection.x, nextY = intersection.y;
+      // draw a line
+      svg.append('svg:path')
+        .attr('d', function(d) {
+          return 'M ' + startPos.x +' '+ startPos.y + ' l '+(nextX - startPos.x)+' ' + (nextY - startPos.y);
+        })
+        .attr("class", "zap-line component");
+      startPos = {x: nextX, y: nextY};
+    });
+
+    // append the ending path
+    svg.append('svg:path')
+      .attr('d', function(d) {
+        console.log("wire path", startPos, endPos);
+        return 'M ' + startPos.x +' '+ startPos.y + ' l '+(endPos.x - startPos.x)+' ' + (endPos.y - startPos.y);
+      })
+      .attr("class", "zap-line component");
+
+    return this;
+  }
+
+  Wire.prototype.intersect = function (x, y) {
+    this.intersections.push({x: x, y:y});
+  }
+
+  Zap.prototype.connect = function (comp1, comp2) {
+    return new Wire(comp1, comp2);
+  }
+})(Zap);
