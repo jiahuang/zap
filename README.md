@@ -1,3 +1,8 @@
-# Zap, circuit drawing library
+# Zap, circuit drawing library for JavaScript
 
-Because why not.
+Installation:
+
+```
+brew install closure-compiler
+./build.sh
+```
