@@ -1,7 +1,7 @@
 var Battery = function (volts) {
   this.voltage = volts;
-  this.in = {x: 0, y: 0};
-  this.out = {x: 0, y: 0};
+  this.in = new Connection(this);
+  this.out = new Connection(this);
   this.rotation = 0;
   this.x = 0;
   this.y = 0;
@@ -10,17 +10,17 @@ var Battery = function (volts) {
 Battery.prototype.calculateTerminals = function() {
   var actualRotation = this.rotation % 360;
   if (actualRotation === 0) {
-    this.in = {x: this.x, y: this.y - 25/2};
-    this.out = {x: this.x, y: this.y + 25/2 };
+    this.in.place(this.x, this.y - 25/2);
+    this.out.place(this.x, this.y + 25/2);
   } else if (actualRotation === 180 || actualRotation === -180) {
-    this.in = {x: this.x, y: this.y + 25/2};
-    this.out = {x: this.x, y: this.y - 25/2 };
+    this.in.place(this.x, this.y + 25/2);
+    this.out.place(this.x, this.y - 25/2);
   } else if (actualRotation == -90 || actualRotation === -270) {
-    this.in = {x: this.x - 25/2, y: this.y};
-    this.out = {x: this.x + 25/2, y: this.y};
+    this.in.place(this.x - 25/2, this.y);
+    this.out.place(this.x + 25/2, this.y);
   } else if (actualRotation == 90 || actualRotation === -270) {
-    this.in = {x: this.x + 25/2, y: this.y};
-    this.out = {x: this.x - 25/2, y: this.y};
+    this.in.place(this.x + 25/2, this.y);
+    this.out.place(this.x - 25/2, this.y);
   }
 
   console.log("calculating", this.in, this.out);
@@ -84,15 +84,6 @@ Battery.prototype.render = function (svg) {
 
   return this;
 }
-
-Battery.prototype.inWire = function () {
-  console.log("in", {obj: this, wire: 'in'});
-  return {obj: this, wire: 'in'};
-}
-
-Battery.prototype.outWire = function () {
-  return {obj: this, wire: 'out'};
-};
 
 Zap.prototype.createBattery = function (volts) {
   return new Battery(volts);

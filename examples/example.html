@@ -40,8 +40,8 @@
     battery.rotateLeft();
     var battery2 = zap.createBattery(20);
 
-    var wire1 = zap.connect(battery.inWire(), battery2.outWire());
-    var wire2 = zap.connect(battery.outWire(), battery2.inWire());
+    var wire1 = zap.connect(battery.in, battery2.out);
+    var wire2 = zap.connect(battery.out, battery2.in);
 
     view.place(battery, 100, 100);
     view.place(battery2, 200, 200);

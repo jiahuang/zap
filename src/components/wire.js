@@ -7,8 +7,8 @@ var Wire = function (comp1, comp2) {
 Wire.prototype.render = function (svg) {
   // svg renderings
   console.log("end", this.comp2.wire);
-  var startPos = this.comp1.obj[this.comp1.wire];
-  var endPos = this.comp2.obj[this.comp2.wire];
+  var startPos = {x: this.comp1.x, y: this.comp1.y};
+  var endPos = {x: this.comp2.x, y: this.comp2.y};
 
   this.intersections.forEach(function (intersection, index) {
     var nextX = intersection.x, nextY = intersection.y;
