@@ -8,17 +8,17 @@ var Battery = function (volts) {
 }
   
 Battery.prototype.calculateTerminals = function() {
-  var actualRotation = this.rotation % 360;
-  if (actualRotation === 0) {
+  var actualRotation = this.rotation % (Math.PI * 2);
+  if (actualRotation == 0) {
     this.in.place(this.x, this.y - 25/2);
     this.out.place(this.x, this.y + 25/2);
-  } else if (actualRotation === 180 || actualRotation === -180) {
+  } else if (actualRotation == Math.PI || actualRotation == -Math.PI) {
     this.in.place(this.x, this.y + 25/2);
     this.out.place(this.x, this.y - 25/2);
-  } else if (actualRotation == -90 || actualRotation === -270) {
+  } else if (actualRotation == -Math.PI/2 || actualRotation == -Math.PI*(3/2)) {
     this.in.place(this.x - 25/2, this.y);
     this.out.place(this.x + 25/2, this.y);
-  } else if (actualRotation == 90 || actualRotation === -270) {
+  } else if (actualRotation == Math.PI/2 || actualRotation == -Math.PI*(3/2)) {
     this.in.place(this.x + 25/2, this.y);
     this.out.place(this.x - 25/2, this.y);
   }
@@ -27,17 +27,17 @@ Battery.prototype.calculateTerminals = function() {
 }
 
 Battery.prototype.rotateLeft = function () {
-  this.rotation -= 90;
+  this.rotation -= Math.PI/2;
   this.calculateTerminals();
 }
 
 Battery.prototype.rotateRight = function () {
-  this.rotation += 90;
+  this.rotation += Math.PI/2;
   this.calculateTerminals();
 }
 
 Battery.prototype.flip = function () {
-  this.rotation += 180;
+  this.rotation += Math.PI;
   this.calculateTerminals();
 }
 
@@ -57,22 +57,22 @@ Battery.prototype.render = function (svg) {
     .attr('d', function(d, i) {
       return 'M ' + (that.x + i%2*(-7) - 15/2)+' '+ (that.y + i * 5 - 25/2) + ' l '+d+' 0';
     })
-    .attr("transform", "rotate("+that.rotation+" "+ that.x +", "+ that.y+")")
+    .attr("transform", "rotate("+(that.rotation/Math.PI*180)+" "+ that.x +", "+ that.y+")")
     .attr("class", "zap-line component");
 
-  var actualRotation = that.rotation % 360;
+  var actualRotation = that.rotation % (Math.PI * 2);
   var translateX = that.x;
   var translateY = that.y;
-  if (actualRotation === 0) {
+  if (actualRotation == 0) {
     translateX += 20;
     translateY += 5;
-  } else if (actualRotation === 180 || actualRotation === -180) {
+  } else if (actualRotation == Math.PI || actualRotation == -Math.PI) {
     translateX -= 50;
     translateY += 5;
-  } else if (actualRotation == -90 || actualRotation === -270) {
+  } else if (actualRotation == -Math.PI/2 || actualRotation == -Math.PI*(3/2)) {
     translateX -= 10;
     translateY -= 25;
-  } else if (actualRotation == 90 || actualRotation === -270) {
+  } else if (actualRotation == Math.PI/2 || actualRotation == -Math.PI*(3/2)) {
     translateX -= 15;
     translateY += 35;
   }
