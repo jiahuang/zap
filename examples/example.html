@@ -28,22 +28,28 @@
   </style>
   <script type="text/javascript">
   window.onload = function() {
+
+    // Create map.
+
     var zap = new Zap;
     var resistor = zap.createResistor(5);
     
     var capacitor = zap.createCapacitor(10);
     var ground = zap.createGround();
     var opamp = zap.createOpAmp('TI310');
-    var view = zap.createView(500, 500);
 
     var battery = zap.createBattery(10);
-    battery.rotateLeft();
     var battery2 = zap.createBattery(20);
 
     var wire1 = zap.connect(battery.in, battery2.out);
     var wire2 = zap.connect(battery.out, battery2.in);
 
+    // Create view.
+
+    var view = zap.createView(500, 500);
+
     view.place(battery, 100, 100);
+    battery.rotateLeft(); 
     view.place(battery2, 200, 200);
 
     wire1.intersect(50, 100);
