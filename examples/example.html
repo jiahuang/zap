@@ -2,7 +2,15 @@
 <html>
 <head>
   <script src="../lib/d3.v2.min.js"></script>
-  <script src="../lib/zap.js"></script>
+  <script src="../src/zap.js"></script>
+  <script src="../src/component.js"></script>
+  <script src="../src/components/connection.js"></script>
+  <script src="../src/components/wire.js"></script>
+  <script src="../src/components/battery.js"></script>
+  <script src="../src/components/capacitor.js"></script>
+  <script src="../src/components/resistor.js"></script>
+  <script src="../src/components/opamp.js"></script>
+  <script src="../src/components/ground.js"></script>
 
   <style type="text/css">
     .axis path,
@@ -29,53 +37,117 @@
   <script type="text/javascript">
   window.onload = function() {
 
-    // Create map.
+    function createVoltageDivider(element) {
+      var zap = new Zap();
 
-    var zap = new Zap;
-    var resistor = zap.createResistor(5);
-    
-    var capacitor = zap.createCapacitor(10);
-    var ground = zap.createGround();
-    var opamp = zap.createOpAmp('TI310');
+      var resistor1 = zap.createResistor(5);
+      var resistor2 = zap.createResistor(10);
+      var ground = zap.createGround();
 
-    var battery = zap.createBattery(10);
-    var battery2 = zap.createBattery(20);
+      var view = zap.createView(200, 200);
+      var wire1 = zap.connect(resistor1.out, resistor2.in);
+      var wire2 = zap.connect(resistor2.out, ground.in);
 
-    var wire1 = zap.connect(battery.in, battery2.out);
-    var wire2 = zap.connect(battery.out, battery2.in);
+      view.wires = [wire1, wire2];
+      view.place(resistor1, 100, 50);
+      view.place(resistor2, 100, 100);
+      view.place(ground, 100, 150);
 
-    // Create view.
+      view.render(element);
 
-    var view = zap.createView(500, 500);
+    }
 
-    view.place(battery, 100, 100);
-    battery.rotateLeft(); 
-    view.place(battery2, 200, 200);
+    function createLowPassFilter(element) {
+      var zap = new Zap();
 
-    wire1.intersect(50, 100);
-    wire1.intersect(50, 230);
-    wire1.intersect(200, 230);
+      var resistor1 = zap.createResistor(5);
+      var resistor2 = zap.createResistor(10);
+      var opAmp = zap.createOpAmp('OPA4188');
+      var capacitor = zap.createCapacitor('10');
+      var ground = zap.createGround();
 
-    wire2.intersect(200, 100);
+      var view = zap.createView(200, 200);
+      var wireArray = [];
+      wireArray.push(zap.connect(resistor1.out, opAmp.vPos));
+      wireArray.push(zap.connect(opAmp.vNeg, ground.in));
+      wireArray.push(zap.connect(opAmp.vPos, resistor2.out));
+      wireArray.push(zap.connect(resistor2.in, capacitor.in));
+      wireArray.push(zap.connect(capacitor.out, resistor2.out));
+      wireArray.push(zap.connect(resistor2.in, opAmp.vOut));
 
-    view.wires = [wire1, wire2];
-    view.render(d3.select('#battery'));
+      wireArray[1].intersect(70, 130);
+      wireArray[2].intersect(83, 120);
+      wireArray[5].intersect(117, 125);
+      wireArray[5].intersect(130, 125);
 
-    // console.log(resistor.render(d3.select('#resistor')));
-    //console.log(battery.render(d3.select('#resistor')));
-    // console.log(capacitor.render(d3.select('#capacitor')));
-    // console.log(ground.render(d3.select('#ground')));
-    // console.log(opamp.render(d3.select('#opamp')));
+      resistor1.rotateLeft();
+      resistor2.rotateRight();
+      capacitor.rotateRight();
+      opAmp.rotateRight();
+
+      view.wires = wireArray;
+      view.place(resistor1, 50, 120);
+      view.place(opAmp, 100, 125);
+      view.place(capacitor, 100, 20);
+      view.place(resistor2, 100, 70);
+      view.place(ground, 70, 170);
+
+      view.render(element);
+    }
+
+    function createHighPassFilter(element) {
+      var zap = new Zap();
+
+      var resistor1 = zap.createResistor(5);
+      var resistor2 = zap.createResistor(10);
+      var opAmp = zap.createOpAmp('OPA4188');
+      var capacitor = zap.createCapacitor('10');
+      var ground = zap.createGround();
+
+      var view = zap.createView(200, 200);
+      var wireArray = [];
+      wireArray.push(zap.connect(capacitor.out, resistor1.in));
+      wireArray.push(zap.connect(opAmp.vNeg, ground.in));
+      wireArray.push(zap.connect(resistor1.out, opAmp.vPos));
+      wireArray.push(zap.connect(resistor2.in, opAmp.vPos));
+      wireArray.push(zap.connect(resistor2.out, opAmp.vOut));
+
+      wireArray[1].intersect(70, 110);
+      wireArray[3].intersect(83, 100);
+      wireArray[4].intersect(117.5, 105);
+      wireArray[4].intersect(130, 105);
+
+      resistor1.rotateLeft();
+      resistor2.rotateLeft();
+      capacitor.rotateLeft();
+      opAmp.rotateRight();
+
+      view.wires = wireArray;
+      view.place(resistor1, 60, 100);
+      view.place(opAmp, 100, 105);
+      view.place(capacitor, 20, 100);
+      view.place(resistor2, 100, 70);
+      view.place(ground, 70, 170);
+
+      view.render(element);
+    }
+
+    createVoltageDivider(d3.select('#circuit1'));
+    createLowPassFilter(d3.select('#circuit2'));
+    createHighPassFilter(d3.select('#circuit3'));
 
   }
   </script>
 </head>
 <body>
-<div id="resistor"></div>
-<div id="battery"></div>
-<div id="capacitor"></div>
-<div id="ground"></div>
-<div id="opamp"></div>
+Voltage Divider
+<div id="circuit1"></div>
+
+Low Pass Filter
+<div id="circuit2"></div>
+
+High Pass Filter
+<div id="circuit3"></div>
 
 </body>
 </html>
