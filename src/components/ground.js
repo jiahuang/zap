@@ -1,20 +1,39 @@
 var Ground = function (zap) {
-  this.w = zap.baseWidth;
-  this.h = zap.baseHeight;
+  this.in = new Connection(this);
 }
 
-Ground.prototype.render = function (element) {
-  // svg renderings
-  var svg = element.append('svg').attr('width', this.w).attr('height', this.h);
-  var x = 100, y = 100;
+Ground.prototype = new Component();
 
+Ground.prototype.placeUp = function () {
+  this.in.place(this.x, this.y - (25/2 + 5));
+}
+
+Ground.prototype.placeDown = function () {
+  this.in.place(this.x, this.y + (25/2 + 5));
+}
+
+Ground.prototype.placeLeft = function () {
+  this.in.place(this.x - (25/2 + 5), this.y);
+}
+
+Ground.prototype.placeRight = function () {
+  this.in.place(this.x + (25/2 + 5), this.y);
+}
+
+Ground.prototype.render = function (svg) {
+  var that = this;
+  // svg renderings
   svg.selectAll('div')
-    .data([30, 20, 10])
+    .data([10, 30, 20, 10])
     .enter()
     .append('svg:path')
     .attr('d', function(d, i) {
-      return 'M ' + (x + i*5)+' '+ (y + i * 5) + ' l '+d+' 0';
+      if (i == 0) {
+        return 'M ' +( that.x )+' '+( that.y - 15)+ ' l 0 '+ d;
+      }
+      return 'M ' + (that.x + (i-1)*5 - 30/2)+' '+ (that.y + (i-1) * 5 - 5) + ' l '+d+' 0';
     })
+    .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
     .attr("class", "zap-line component");
 
   return this;
