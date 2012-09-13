@@ -17,13 +17,11 @@ View.prototype.render = function (element) {
   var svg = element.append('svg').attr('width', this.w).attr('height', this.h);
   // set up wiring
   this.wires.forEach(function (wire, index) {
-    console.log("wire", wire);
     wire.render(svg);
   });
 
   // render all components
   this.placements.forEach(function (item, index) {
-    console.log('component', item);
     item['component'].render(svg);
   });
 }

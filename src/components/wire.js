@@ -33,7 +33,7 @@ Wire.prototype.render = function (svg) {
 }
 
 Wire.prototype.intersect = function (x, y) {
-  this.intersections.push({x: x, y:y});
+  this.intersections.push({x: x, y: y});
 }
 
 Zap.prototype.connect = function (comp1, comp2) {

@@ -19,11 +19,8 @@ var resistor1 = zap.createResistor(5);
 var resistor2 = zap.createResistor(10);
 var ground = zap.createGround();
 
-var wire1 = zap.connect(resistor1.out, resistor2.in);
-var wire2 = zap.connect(resistor2.out, ground.in);
-
 var view = zap.createView(200, 200);
-view.wires = [wire1, wire2];
+view.wires = [zap.connect(resistor1.out, resistor2.in), zap.connect(resistor2.out, ground.in)];
 view.place(resistor1, 100, 50);
 view.place(resistor2, 100, 100);
 view.place(ground, 100, 150);
