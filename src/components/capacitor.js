@@ -1,10 +1,25 @@
 ﻿var Capacitor = function (farads) {
+  Component.apply(this);
+  
   this.capacitance = farads;
   this.in = new Connection(this);
   this.out = new Connection(this);
 }
 
 Capacitor.prototype = new Component();
+
+Capacitor.prototype.toJSON = function () {
+  return {
+    type: 'capacitor',
+    id: this.id,
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation,
+    capacitance: this.farads,
+    in: this.in.toJSON(),
+    out: this.out.toJSON()
+  };
+};
 
 Capacitor.prototype.placeUp = function () {
   this.in.place(this.x, this.y - (25/2 + 5));

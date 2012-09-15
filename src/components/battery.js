@@ -1,10 +1,25 @@
 var Battery = function (volts) {
+  Component.apply(this);
+
   this.voltage = volts;
   this.in = new Connection(this);
   this.out = new Connection(this);
 }
 
 Battery.prototype = new Component();
+
+Battery.prototype.toJSON = function () {
+  return {
+    type: 'battery',
+    id: this.id,
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation,
+    voltage: this.voltage,
+    in: this.in.toJSON(),
+    out: this.out.toJSON()
+  };
+};
   
 Battery.prototype.placeUp = function () {
   this.in.place(this.x, this.y - (25/2 + 10));

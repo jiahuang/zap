@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+  <script src="../lib/d3.v2.min.js"></script>
+  <script src="../src/zap.js"></script>
+  <script src="../src/component.js"></script>
+  <script src="../src/components/connection.js"></script>
+  <script src="../src/components/wire.js"></script>
+  <script src="../src/components/battery.js"></script>
+  <script src="../src/components/capacitor.js"></script>
+  <script src="../src/components/resistor.js"></script>
+  <script src="../src/components/opamp.js"></script>
+  <script src="../src/components/ground.js"></script>
+
+  <style type="text/css">
+    #circuit {
+      border: 1px solid blue;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        font-family: sans-serif;
+        font-size: 10px;
+    }
+
+    .zap-line {
+      fill: none;
+      stroke-width: 1.5px;
+    }
+    
+    .zap-line.component{
+      stroke: steelblue;
+    }
+
+    #errors { 
+      background: #fcc;
+      min-height: 1.3em;
+      color: white;
+    }
+
+    #errors.active {
+      background: red;
+    }
+  </style>
+  <script type="text/javascript">
+
+  window.onload = function() {
+    var compiler = new Worker('../src/worker.js');
+    compiler.onmessage = function (event) {
+      var msg = JSON.parse(event.data);
+      switch (msg.action) {
+        case 'render':
+          d3.select('#errors').text('').classed('active', false)
+          var view = Zap.parse(msg.json);
+          d3.select('#circuit').html('');
+          view.render(d3.select('#circuit'));
+      }
+    };
+    compiler.onerror = function (e) {
+      d3.select('#errors').text(e.message).classed('active', true)
+    }
+
+    var valcache = d3.select('#repl')[0][0].value;
+    d3.select('#repl').on('keydown', function () {
+      setTimeout(function () {
+        if (valcache != d3.select('#repl')[0][0].value) {
+          valcache = d3.select('#repl')[0][0].value;
+          compiler.postMessage(valcache);
+        }
+      }, 0);
+    })
+  };
+
+  </script>
+</head>
+<body>
+
+<p id="errors"></p>
+
+<textarea id="repl" rows="20" cols="40">var zap = new Zap();
+
+var resistor1 = zap.createResistor(5);
+var resistor2 = zap.createResistor(10);
+var ground = zap.createGround();
+
+var view = zap.createView(200, 200);
+view.wires = [zap.connect(resistor1.out, resistor2.in), zap.connect(resistor2.out, ground.in)];
+view.place(resistor1, 100, 50);
+view.place(resistor2, 100, 100);
+view.place(ground, 100, 150);
+
+view.render(repl);</textarea>
+
+
+<div id="circuit"></div>
+
+</body>
+</html>

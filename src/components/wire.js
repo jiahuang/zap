@@ -4,6 +4,15 @@ var Wire = function (comp1, comp2) {
   this.intersections = [];
 }
 
+Wire.prototype.toJSON = function () {
+  return {
+    type: 'wire',
+    comp1: this.comp1,
+    comp2: this.comp2,
+    intersections: this.intersections
+  };
+};
+
 Wire.prototype.render = function (svg) {
   // svg renderings
   console.log("end", this.comp2.wire);

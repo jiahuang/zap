@@ -1,10 +1,25 @@
 ﻿var Resistor = function (ohms) {
+  Component.apply(this);
+  
   this.resistance = ohms;
   this.in = new Connection(this);
   this.out = new Connection(this);
 }
 
 Resistor.prototype = new Component();
+
+Resistor.prototype.toJSON = function () {
+  return {
+    type: 'resistor',
+    id: this.id,
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation,
+    resistance: this.resistance,
+    in: this.in.toJSON(),
+    out: this.out.toJSON()
+  };
+};
 
 Resistor.prototype.placeUp = function () {
   this.in.place(this.x, this.y - (35/2 ));

@@ -1,8 +1,21 @@
 var Ground = function (zap) {
+  Component.apply(this);
+  
   this.in = new Connection(this);
 }
 
 Ground.prototype = new Component();
+
+Ground.prototype.toJSON = function () {
+  return {
+    type: 'ground',
+    id: this.id,
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation,
+    in: this.in.toJSON()
+  };
+};
 
 Ground.prototype.placeUp = function () {
   this.in.place(this.x, this.y - (25/2 + 5));

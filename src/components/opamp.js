@@ -1,4 +1,6 @@
 var OpAmp = function (model) {
+  Component.apply(this);
+  
   this.model = model;
   this.vPos = new Connection(this);
   this.vNeg = new Connection(this);
