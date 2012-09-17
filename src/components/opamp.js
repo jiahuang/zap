@@ -11,6 +11,22 @@ var OpAmp = function (model) {
 
 OpAmp.prototype = new Component();
 
+OpAmp.prototype.toJSON = function () {
+  return {
+    type: 'opAmp',
+    id: this.id,
+    x: this.x,
+    y: this.y,
+    rotation: this.rotation,
+    model: this.model,
+    vPos: this.vPos.toJSON(),
+    vNeg: this.vNeg.toJSON(),
+    vSPos: this.vSPos.toJSON(),
+    vSNeg: this.vSNeg.toJSON(),
+    vOut: this.vOut.toJSON()
+  };
+};
+
 // fun fun fun 
 OpAmp.prototype.placeUp = function () {
   this.vPos.place(this.x - (15 * (1/3)), this.y + 18/2);
@@ -45,6 +61,7 @@ OpAmp.prototype.placeRight = function () {
 }
 
 OpAmp.prototype.render = function (svg) {
+  console.log("opamp render", this);
   var that = this;
 
   var pathData = [{x: 15, y: -18}, {x: 15, y: 18}]

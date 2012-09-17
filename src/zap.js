@@ -14,6 +14,16 @@ function Zap () {
 }
 
 Zap.parse = function (json) {
+
+  function setDefaults(value, obj){
+    obj.x = value.x;
+    obj.y = value.y
+    if (value.rotation != 'undefined') {
+      obj.rotation = value.rotation;
+    }
+    return obj;
+  }
+
   var zap = new Zap();
   var ids = {};
   var connections = [];
@@ -32,25 +42,19 @@ Zap.parse = function (json) {
         case 'connection':
           var c = new Connection(null);
           (connections[v.base] || (connections[v.base] = [])).push(c);
-          c.x = v.x;
-          c.y = v.y;
-          return c;
+          return setDefaults(v, c);
         case 'resistor':
-          var r = zap.createResistor(v.resistance);
-          r.x = v.x;
-          r.y = v.y;
-          r.rotation = v.rotation;
-          r.in = v.in;
-          ids[v.id] = r;
-          return r;
+          ids[v.id] = setDefaults(v, zap.createResistor(v.resistance));
+          return ids[v.id];
         case 'ground':
-          var g = zap.createGround();
-          g.x = v.x;
-          g.y = v.y;
-          g.rotation = v.rotation;
-          ids[v.id] = g;
-          g.in = v.in;
-          return g;
+          ids[v.id] = setDefaults(v, zap.createGround());
+          return ids[v.id];
+        case 'opAmp':
+          ids[v.id] = setDefaults(v, zap.createOpAmp(v.model));
+          return ids[v.id];
+        case 'capacitor':
+          ids[v.id] = setDefaults(v, zap.createCapacitor(v.capacitance));
+          return ids[v.id];
       }
     }
     return v;
@@ -58,7 +62,7 @@ Zap.parse = function (json) {
 
   for (var key in connections) {
     connections[key].forEach(function (connection) {
-      console.log(connection);
+      // console.log(connection);
       connection.base = ids[key];
     });
   }
