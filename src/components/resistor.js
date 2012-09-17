@@ -53,7 +53,7 @@ Resistor.prototype.render = function (svg) {
       pathData.forEach(function (point, index) {
         path += 'l '+point.x + ' '+point.y + ' ';
       })
-      return 'M ' +( that.x ) +' '+ ( that.y - 35/2) + path; //' l 10 0 l 5 10 l 10 -20 l 10 20 l 10 -20 l 10 20 l 5 -10 l 10 0'
+      return 'M ' +( that.x ) +' '+ ( that.y - 35/2) + path;
     })
     .attr("transform", "rotate("+(that.rotation/Math.PI*180)+" "+ that.x +", "+ that.y+")")
     .attr("class", "zap-line component");

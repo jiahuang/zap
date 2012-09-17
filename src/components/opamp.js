@@ -61,7 +61,6 @@ OpAmp.prototype.placeRight = function () {
 }
 
 OpAmp.prototype.render = function (svg) {
-  console.log("opamp render", this);
   var that = this;
 
   var pathData = [{x: 15, y: -18}, {x: 15, y: 18}]

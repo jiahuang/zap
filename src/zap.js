@@ -62,7 +62,6 @@ Zap.parse = function (json) {
 
   for (var key in connections) {
     connections[key].forEach(function (connection) {
-      // console.log(connection);
       connection.base = ids[key];
     });
   }

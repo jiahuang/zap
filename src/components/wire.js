@@ -15,7 +15,6 @@ Wire.prototype.toJSON = function () {
 
 Wire.prototype.render = function (svg) {
   // svg renderings
-  console.log("end", this.comp2.wire);
   var startPos = {x: this.comp1.x, y: this.comp1.y};
   var endPos = {x: this.comp2.x, y: this.comp2.y};
 
@@ -33,7 +32,6 @@ Wire.prototype.render = function (svg) {
   // append the ending path
   svg.append('svg:path')
     .attr('d', function(d) {
-      console.log("wire path", startPos, endPos);
       return 'M ' + startPos.x +' '+ startPos.y + ' l '+(endPos.x - startPos.x)+' ' + (endPos.y - startPos.y);
     })
     .attr("class", "zap-line component");
