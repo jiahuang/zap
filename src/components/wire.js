@@ -18,23 +18,25 @@ Wire.prototype.render = function (svg) {
   var startPos = {x: this.comp1.x, y: this.comp1.y};
   var endPos = {x: this.comp2.x, y: this.comp2.y};
 
-  this.intersections.forEach(function (intersection, index) {
-    var nextX = intersection.x, nextY = intersection.y;
-    // draw a line
+  function drawLine(s, e) {
     svg.append('svg:path')
       .attr('d', function(d) {
-        return 'M ' + startPos.x +' '+ startPos.y + ' l '+(nextX - startPos.x)+' ' + (nextY - startPos.y);
+        return 'M ' + s.x +' '+ s.y + ' l '+(e.x - s.x)+' ' + (e.y - s.y);
       })
       .attr("class", "zap-line component");
-    startPos = {x: nextX, y: nextY};
+    return {x: e.x, y: e.y};
+  }
+
+  this.intersections.forEach(function (intersection, index) {
+    startPos = drawLine(startPos, intersection);
   });
 
+  if (this.intersections.length < 1 && startPos.x != endPos.x && startPos.y != endPos.y) {
+    startPos = drawLine(startPos, {x: endPos.x, y: startPos.y});
+  }
+  
   // append the ending path
-  svg.append('svg:path')
-    .attr('d', function(d) {
-      return 'M ' + startPos.x +' '+ startPos.y + ' l '+(endPos.x - startPos.x)+' ' + (endPos.y - startPos.y);
-    })
-    .attr("class", "zap-line component");
+  drawLine(startPos, endPos);
 
   return this;
 }
