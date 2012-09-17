@@ -31,6 +31,7 @@ Wire.prototype.render = function (svg) {
     startPos = drawLine(startPos, intersection);
   });
 
+  // do some auto-wiring if user hasn't specified anything
   if (this.intersections.length < 1 && startPos.x != endPos.x && startPos.y != endPos.y) {
     startPos = drawLine(startPos, {x: endPos.x, y: startPos.y});
   }
