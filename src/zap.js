@@ -31,7 +31,8 @@ Zap.parse = function (json) {
     if (typeof v == 'object' && v.type) {
       switch (v.type) {
         case 'view':
-          var view = zap.createView(v.h, v.w);
+          var view = zap.createView(v.h, v.w, v.scale);
+          console.log("view json parse", v);
           view.wires = v.wires;
           view.placements = v.placements;
           return v;
@@ -42,7 +43,10 @@ Zap.parse = function (json) {
         case 'connection':
           var c = new Connection(null);
           (connections[v.base] || (connections[v.base] = [])).push(c);
-          return setDefaults(v, c);
+          c = setDefaults(v, c);
+          c.xOffset = v.xOffset;
+          c.yOffset = v.yOffset;
+          return c;
         case 'resistor':
           ids[v.id] = setDefaults(v, zap.createResistor(v.resistance));
           return ids[v.id];
@@ -66,7 +70,7 @@ Zap.parse = function (json) {
     });
   }
 
-  var view = zap.createView(data.h, data.w, zap);
+  var view = zap.createView(data.h, data.w, data.scale);
   view.wires = data.wires;
   view.placements = data.placements;
   return view;
@@ -76,10 +80,10 @@ Zap.parse = function (json) {
  * View.
  */
 
-var View = function (height, width, zap) {
+var View = function (height, width, scale) {
   this.h = height;
   this.w = width;
-  this.zap = zap;
+  this.scale = scale;
   this.wires = [];
   this.placements = [];
 }
@@ -89,6 +93,7 @@ View.prototype.toJSON = function () {
     type: 'view',
     h: this.h,
     w: this.w,
+    scale: this.scale,
     wires: this.wires,
     placements: this.placements
   };
@@ -99,27 +104,34 @@ View.prototype.render = function (element) {
     element.renderView(this);
   } else {
     var svg = element.append('svg').attr('width', this.w).attr('height', this.h);
-    // set up wiring
-    this.wires.forEach(function (wire, index) {
-      wire.render(svg);
-    });
-
+    var that = this;
+    console.log(this);
     // render all components
     this.placements.forEach(function (item, index) {
+      console.log('setting scale', that.scale);
+      item['component'].scale = that.scale;
+      console.log(item['component']);
       item['component'].render(svg);
+    });
+
+    // set up wiring
+    this.wires.forEach(function (wire, index) {
+      wire.scale = that.scale;
+      console.log(wire.scale);
+      wire.render(svg);
     });
   }
 }
 
 View.prototype.place = function (component, x, y) {
   component.place(x, y);
-
   this.placements.push({component: component, x: x, y: y});
 }
 
-Zap.prototype.createView = function (height, width) {
-  return new View(height, width, this);
+Zap.prototype.createView = function (height, width, scale) {
+  return new View(height, width, scale || 1);
 };
+
 
 /**
  * Module exports.

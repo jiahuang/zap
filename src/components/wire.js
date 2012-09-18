@@ -2,6 +2,7 @@ var Wire = function (comp1, comp2) {
   this.comp1 = comp1;
   this.comp2 = comp2;
   this.intersections = [];
+  this.scale = 1;
 }
 
 Wire.prototype.toJSON = function () {
@@ -15,6 +16,9 @@ Wire.prototype.toJSON = function () {
 
 Wire.prototype.render = function (svg) {
   // svg renderings
+  this.comp1.scale(this.scale);
+  this.comp2.scale(this.scale);
+
   var startPos = {x: this.comp1.x, y: this.comp1.y};
   var endPos = {x: this.comp2.x, y: this.comp2.y};
 

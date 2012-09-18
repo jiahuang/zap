@@ -12,25 +12,26 @@ Ground.prototype.toJSON = function () {
     id: this.id,
     x: this.x,
     y: this.y,
+    scale: this.scale,
     rotation: this.rotation,
     in: this.in.toJSON()
   };
 };
 
 Ground.prototype.placeUp = function () {
-  this.in.place(this.x, this.y - (25/2 + 5));
+  this.in.place(this.x, this.y, 0, -25/2);
 }
 
 Ground.prototype.placeDown = function () {
-  this.in.place(this.x, this.y + (25/2 + 5));
+  this.in.place(this.x, this.y, 0, 25/2);
 }
 
 Ground.prototype.placeLeft = function () {
-  this.in.place(this.x - (25/2 + 5), this.y);
+  this.in.place(this.x, this.y, -25/2, 0);
 }
 
 Ground.prototype.placeRight = function () {
-  this.in.place(this.x + (25/2 + 5), this.y);
+  this.in.place(this.x, this.y, 25/2, 0);
 }
 
 Ground.prototype.render = function (svg) {
@@ -42,11 +43,11 @@ Ground.prototype.render = function (svg) {
     .append('svg:path')
     .attr('d', function(d, i) {
       if (i == 0) {
-        return 'M ' +( that.x )+' '+( that.y - 15)+ ' l 0 '+ d;
+        return 'M ' +( that.x )+' '+(that.y - 12.5*that.scale)+ ' l 0 '+ (d*that.scale);
       }
-      return 'M ' + (that.x + (i-1)*5 - 30/2)+' '+ (that.y + (i-1) * 5 - 5) + ' l '+d+' 0';
+      return 'M ' + (that.x + ((i-1)*5 - 15)*that.scale)+' '+ (that.y + ((i-1) * 5 -2.5)*that.scale) + ' l '+(d*that.scale)+' 0';
     })
-    .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
+    .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y +")")
     .attr("class", "zap-line component");
 
   return this;

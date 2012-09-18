@@ -14,6 +14,7 @@ Resistor.prototype.toJSON = function () {
     id: this.id,
     x: this.x,
     y: this.y,
+    scale: this.scale,
     rotation: this.rotation,
     resistance: this.resistance,
     in: this.in.toJSON(),
@@ -22,23 +23,23 @@ Resistor.prototype.toJSON = function () {
 };
 
 Resistor.prototype.placeUp = function () {
-  this.in.place(this.x, this.y - (35/2 ));
-  this.out.place(this.x, this.y + (35/2 ));
+  this.in.place(this.x, this.y, 0, -35/2);
+  this.out.place(this.x, this.y, 0, 35/2);
 }
 
 Resistor.prototype.placeDown = function () {
-  this.in.place(this.x, this.y + (35/2 ));
-  this.out.place(this.x, this.y - (35/2 ));
+  this.in.place(this.x, this.y, 0, 35/2);
+  this.out.place(this.x, this.y, 0,  -35/2 );
 }
 
 Resistor.prototype.placeLeft = function () {
-  this.in.place(this.x - (35/2 ), this.y);
-  this.out.place(this.x + (35/2), this.y);
+  this.in.place(this.x, this.y, -35/2, 0);
+  this.out.place(this.x, this.y, 35/2, 0);
 }
 
 Resistor.prototype.placeRight = function () {
-  this.in.place(this.x + (35/2), this.y);
-  this.out.place(this.x - (35/2), this.y);
+  this.in.place(this.x, this.y, 35/2, 0);
+  this.out.place(this.x, this.y, -35/2, 0);
 }
 
 Resistor.prototype.render = function (svg) {
@@ -51,9 +52,9 @@ Resistor.prototype.render = function (svg) {
     .attr('d', function(d) {
       var path = ' ';
       pathData.forEach(function (point, index) {
-        path += 'l '+point.x + ' '+point.y + ' ';
+        path += 'l '+point.x*that.scale + ' '+point.y*that.scale + ' ';
       })
-      return 'M ' +( that.x ) +' '+ ( that.y - 35/2) + path;
+      return 'M ' +( that.x ) +' '+ (that.y - (35/2)*that.scale ) + path;
     })
     .attr("transform", "rotate("+(that.rotation/Math.PI*180)+" "+ that.x +", "+ that.y+")")
     .attr("class", "zap-line component");

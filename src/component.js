@@ -5,6 +5,7 @@ function Component () {
   this.y = 0;
   this.rotation = 0;
   this.id = createUUID();
+  this.scale = 1;
 }
 
 Component.prototype.rotateLeft = function () {
