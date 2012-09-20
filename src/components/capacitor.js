@@ -15,30 +15,30 @@ Capacitor.prototype.toJSON = function () {
     x: this.x,
     y: this.y,
     rotation: this.rotation,
-    capacitance: this.farads,
+    capacitance: this.capacitance,
     in: this.in.toJSON(),
     out: this.out.toJSON()
   };
 };
 
 Capacitor.prototype.placeUp = function () {
-  this.in.place(this.x, this.y - (25/2 + 5));
-  this.out.place(this.x, this.y + (25/2 + 5));
+  this.in.place(this.x, this.y, 0, -15);
+  this.out.place(this.x, this.y, 0,  15);
 }
 
 Capacitor.prototype.placeDown = function () {
-  this.in.place(this.x, this.y + (25/2 + 5));
-  this.out.place(this.x, this.y - (25/2 + 5));
+  this.in.place(this.x, this.y, 0, 15);
+  this.out.place(this.x, this.y, 0, -15);
 }
 
 Capacitor.prototype.placeLeft = function () {
-  this.in.place(this.x - (25/2 + 5), this.y);
-  this.out.place(this.x + (25/2 + 5), this.y);
+  this.in.place(this.x, this.y,  - 15, 0);
+  this.out.place(this.x, this.y, 15, 0);
 }
 
 Capacitor.prototype.placeRight = function () {
-  this.in.place(this.x + (25/2 + 5), this.y);
-  this.out.place(this.x - (25/2 + 5), this.y);
+  this.in.place(this.x, this.y, 15, 0);
+  this.out.place(this.x, this.y, - 15, 0);
 }
 
 Capacitor.prototype.render = function (svg) {
@@ -50,12 +50,12 @@ Capacitor.prototype.render = function (svg) {
     .append('svg:path')
     .attr('d', function(d, i) {
       if (i == 0 ) {
-        return 'M ' +( that.x )+' '+( that.y - 18)+ ' l 0 '+ d;
+        return 'M ' +( that.x )+' '+( that.y - 15*that.scale)+ ' l 0 '+ (d*that.scale);
       }
       if (i == 3 ){
-        return 'M ' +( that.x )+' '+( that.y + 15/2)+ ' l 0 '+ d;
+        return 'M ' +( that.x )+' '+( that.y + 5*that.scale)+ ' l 0 '+ (d*that.scale);
       }
-      return 'M ' +( that.x - 25/2)+' '+( that.y + (i-1)%2*(15) - 15/2)+ ' l '+d+' 0';
+      return 'M ' +( that.x - 25/2*that.scale)+' '+( that.y + ((i-1)%2*(10) - 5)*that.scale)+ ' l '+(d*that.scale)+' 0';
     })
     .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
     .attr("class", "zap-line component");
