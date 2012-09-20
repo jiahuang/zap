@@ -31,8 +31,7 @@ Zap.parse = function (json) {
     if (typeof v == 'object' && v.type) {
       switch (v.type) {
         case 'view':
-          var view = zap.createView(v.h, v.w, v.scale);
-          console.log("view json parse", v);
+          var view = zap.createView(v.w, v.h, v.scale);
           view.wires = v.wires;
           view.placements = v.placements;
           return v;
@@ -47,6 +46,9 @@ Zap.parse = function (json) {
           c.xOffset = v.xOffset;
           c.yOffset = v.yOffset;
           return c;
+        case 'battery':
+          ids[v.id] = setDefaults(v, zap.createBattery(v.voltage));
+          return ids[v.id];
         case 'resistor':
           ids[v.id] = setDefaults(v, zap.createResistor(v.resistance));
           return ids[v.id];
@@ -70,7 +72,7 @@ Zap.parse = function (json) {
     });
   }
 
-  var view = zap.createView(data.h, data.w, data.scale);
+  var view = zap.createView(data.w, data.h, data.scale);
   view.wires = data.wires;
   view.placements = data.placements;
   return view;
@@ -80,7 +82,7 @@ Zap.parse = function (json) {
  * View.
  */
 
-var View = function (height, width, scale) {
+var View = function (width, height, scale) {
   this.h = height;
   this.w = width;
   this.scale = scale;
@@ -108,9 +110,7 @@ View.prototype.render = function (element) {
     console.log(this);
     // render all components
     this.placements.forEach(function (item, index) {
-      console.log('setting scale', that.scale);
       item['component'].scale = that.scale;
-      console.log(item['component']);
       item['component'].render(svg);
     });
 
@@ -128,8 +128,8 @@ View.prototype.place = function (component, x, y) {
   this.placements.push({component: component, x: x, y: y});
 }
 
-Zap.prototype.createView = function (height, width, scale) {
-  return new View(height, width, scale || 1);
+Zap.prototype.createView = function (width, height, scale) {
+  return new View(width, height, scale || 1);
 };
 
 
