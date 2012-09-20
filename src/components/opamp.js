@@ -29,35 +29,35 @@ OpAmp.prototype.toJSON = function () {
 
 // fun fun fun 
 OpAmp.prototype.placeUp = function () {
-  this.vPos.place(this.x - (15 * (1/3)), this.y + 18/2);
-  this.vNeg.place(this.x + (15 * 1/3), this.y + 18/2);
-  this.vSPos.place(this.x - (15 * 1/2), this.y - (18/6));
-  this.vSNeg.place(this.x + (15 * 1/2), this.y - (18/6));
-  this.vOut.place(this.x , this.y - 18/2 );
+  this.vPos.place(this.x, this.y, - (15 * 1/3), + 18/2);
+  this.vNeg.place(this.x, this.y,  + (15 * 1/3), + 18/2);
+  this.vSPos.place(this.x, this.y,  - (15 * 1/2), - (18/6));
+  this.vSNeg.place(this.x, this.y,  + (15 * 1/2), - (18/6));
+  this.vOut.place(this.x, this.y, 0, - 18/2 );
 }
 
 OpAmp.prototype.placeDown = function () {
-  this.vPos.place(this.x - (15 * (1/3)), this.y - 18/2);
-  this.vNeg.place(this.x + (15 * 1/3), this.y - 18/2);
-  this.vSPos.place(this.x - (15 * 1/2), this.y + (18/6));
-  this.vSNeg.place(this.x + (15 * 1/2), this.y + (18/6));
-  this.vOut.place(this.x , this.y + 18/2 );
+  this.vPos.place(this.x, this.y, - (15 * 1/3), - 18/2);
+  this.vNeg.place(this.x, this.y, + (15 * 1/3), - 18/2);
+  this.vSPos.place(this.x, this.y, - (15 * 1/2), + (18/6));
+  this.vSNeg.place(this.x, this.y, + (15 * 1/2), + (18/6));
+  this.vOut.place(this.x , this.y, 0, + 18/2 );
 }
 
 OpAmp.prototype.placeLeft = function () {
-  this.vPos.place(this.x + 18/2, this.y  - (15 * (1/3)));
-  this.vNeg.place(this.x + 18/2, this.y + (15 * 1/3));
-  this.vSPos.place(this.x - (18/6), this.y - (15 * 1/2));
-  this.vSNeg.place(this.x - (18/6), this.y + (15 * 1/2));
-  this.vOut.place(this.x - 18/2, this.y );
+  this.vPos.place(this.x, this.y, + 18/2,  - (15 * (1/3)));
+  this.vNeg.place(this.x, this.y, + 18/2, + (15 * 1/3));
+  this.vSPos.place(this.x, this.y, - (18/6), - (15 * 1/2));
+  this.vSNeg.place(this.x, this.y, - (18/6), + (15 * 1/2));
+  this.vOut.place(this.x, this.y, - 18/2, 0 );
 }
 
 OpAmp.prototype.placeRight = function () {
-  this.vPos.place(this.x - 18/2, this.y  - (15 * (1/3)));
-  this.vNeg.place(this.x - 18/2, this.y + (15 * 1/3));
-  this.vSPos.place(this.x + (18/6), this.y - (15 * 1/2));
-  this.vSNeg.place(this.x + (18/6), this.y + (15 * 1/2));
-  this.vOut.place(this.x + 18/2, this.y );
+  this.vPos.place(this.x, this.y, - 18/2,  - (15 * (1/3)));
+  this.vNeg.place(this.x, this.y, - 18/2, + (15 * 1/3));
+  this.vSPos.place(this.x, this.y, + (18/6), - (15 * 1/2));
+  this.vSNeg.place(this.x, this.y, + (18/6), + (15 * 1/2));
+  this.vOut.place(this.x, this.y,  + 18/2, 0 );
 }
 
 OpAmp.prototype.render = function (svg) {
@@ -69,10 +69,10 @@ OpAmp.prototype.render = function (svg) {
     .attr('d', function(d) {
       var path = ' ';
       pathData.forEach(function (point, index) {
-        path += 'l '+point.x + ' '+point.y + ' ';
+        path += 'l '+(point.x *that.scale) + ' '+(point.y*that.scale) + ' ';
       });
       path += 'z';
-      return 'M ' + ( that.x -15 )+' '+ ( that.y + 18/2) + path;
+      return 'M ' + ( that.x -(15*that.scale))+' '+ ( that.y + (18/2*that.scale)) + path;
     })
     .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
     .attr("class", "zap-line component");
