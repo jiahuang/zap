@@ -16,8 +16,8 @@ Wire.prototype.toJSON = function () {
 
 Wire.prototype.render = function (svg) {
   // svg renderings
-  var startPos = this.comp1.scale(this.scale);
-  var endPos = this.comp2.scale(this.scale);
+  var startPos = this.comp1.scale(this.scaleFactor);
+  var endPos = this.comp2.scale(this.scaleFactor);
 
   function drawLine(s, e) {
     svg.append('svg:path')

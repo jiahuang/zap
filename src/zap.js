@@ -31,7 +31,7 @@ Zap.parse = function (json) {
     if (typeof v == 'object' && v.type) {
       switch (v.type) {
         case 'view':
-          var view = zap.createView(v.w, v.h, v.scale);
+          var view = zap.createView(v.w, v.h).scale(v.scaleFactor);
           view.wires = v.wires;
           view.placements = v.placements;
           return v;
@@ -82,10 +82,10 @@ Zap.parse = function (json) {
  * View.
  */
 
-var View = function (width, height, scale) {
+var View = function (width, height) {
   this.h = height;
   this.w = width;
-  this.scale = scale;
+  this.scaleFactor = 1;
   this.wires = [];
   this.placements = [];
 }
@@ -101,23 +101,31 @@ View.prototype.toJSON = function () {
   };
 };
 
+View.prototype.scale = function (scaleFactor) {
+  if (scaleFactor == 'undefined')
+    return this.scaleFactor;
+
+  this.scaleFactor = scaleFactor;
+  return this;
+}
+
 View.prototype.render = function (element) {
   if (element.renderView) {
     element.renderView(this);
   } else {
     var svg = element.append('svg').attr('width', this.w).attr('height', this.h);
     var that = this;
-    console.log(this);
+    // console.log(this);
     // render all components
     this.placements.forEach(function (item, index) {
-      item['component'].scale = that.scale;
+      item['component'].scaleFactor = that.scaleFactor;
       item['component'].render(svg);
     });
 
     // set up wiring
     this.wires.forEach(function (wire, index) {
-      wire.scale = that.scale;
-      console.log(wire.scale);
+      wire.scaleFactor = that.scaleFactor;
+      console.log(wire.scaleFactor);
       wire.render(svg);
     });
   }
@@ -128,8 +136,8 @@ View.prototype.place = function (component, x, y) {
   this.placements.push({component: component, x: x, y: y});
 }
 
-Zap.prototype.createView = function (width, height, scale) {
-  return new View(width, height, scale || 1);
+Zap.prototype.createView = function (width, height) {
+  return new View(width, height);
 };
 
 

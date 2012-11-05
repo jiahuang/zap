@@ -50,12 +50,12 @@ Capacitor.prototype.render = function (svg) {
     .append('svg:path')
     .attr('d', function(d, i) {
       if (i == 0 ) {
-        return 'M ' +( that.x )+' '+( that.y - 15*that.scale)+ ' l 0 '+ (d*that.scale);
+        return 'M ' +( that.x )+' '+( that.y - 15*that.scaleFactor)+ ' l 0 '+ (d*that.scaleFactor);
       }
       if (i == 3 ){
-        return 'M ' +( that.x )+' '+( that.y + 5*that.scale)+ ' l 0 '+ (d*that.scale);
+        return 'M ' +( that.x )+' '+( that.y + 5*that.scaleFactor)+ ' l 0 '+ (d*that.scaleFactor);
       }
-      return 'M ' +( that.x - 25/2*that.scale)+' '+( that.y + ((i-1)%2*(10) - 5)*that.scale)+ ' l '+(d*that.scale)+' 0';
+      return 'M ' +( that.x - 25/2*that.scaleFactor)+' '+( that.y + ((i-1)%2*(10) - 5)*that.scaleFactor)+ ' l '+(d*that.scaleFactor)+' 0';
     })
     .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
     .attr("class", "zap-line component");

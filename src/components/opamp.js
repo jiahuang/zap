@@ -69,10 +69,10 @@ OpAmp.prototype.render = function (svg) {
     .attr('d', function(d) {
       var path = ' ';
       pathData.forEach(function (point, index) {
-        path += 'l '+(point.x *that.scale) + ' '+(point.y*that.scale) + ' ';
+        path += 'l '+(point.x *that.scaleFactor) + ' '+(point.y*that.scaleFactor) + ' ';
       });
       path += 'z';
-      return 'M ' + ( that.x -(15*that.scale))+' '+ ( that.y + (18/2*that.scale)) + path;
+      return 'M ' + ( that.x -(15*that.scaleFactor))+' '+ ( that.y + (18/2*that.scaleFactor)) + path;
     })
     .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y+")")
     .attr("class", "zap-line component");

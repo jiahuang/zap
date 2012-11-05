@@ -17,7 +17,8 @@ Battery.prototype.toJSON = function () {
     rotation: this.rotation,
     voltage: this.voltage,
     in: this.in.toJSON(),
-    out: this.out.toJSON()
+    out: this.out.toJSON(),
+    highlight: false
   };
 };
   
@@ -50,12 +51,12 @@ Battery.prototype.render = function (svg) {
     .append('svg:path')
     .attr('d', function(d, i) {
       if (i == 0 ) {
-        return 'M ' +( that.x )+' '+( that.y - 22 *that.scale)+ ' l 0 '+ (d*that.scale);
+        return 'M ' +( that.x )+' '+( that.y - 22 *that.scaleFactor)+ ' l 0 '+ (d*that.scaleFactor);
       }
       if (i == 7 ){
-        return 'M ' +( that.x )+' '+( that.y + 25/2 *that.scale)+ ' l 0 '+ (d*that.scale);
+        return 'M ' +( that.x )+' '+( that.y + 25/2 *that.scaleFactor)+ ' l 0 '+ (d*that.scaleFactor);
       }
-      return 'M ' + (that.x + ((i-1)%2*(-7) - 15/2)*that.scale)+' '+ (that.y + ((i-1) * 5 - 25/2)*that.scale) + ' l '+(d*that.scale)+' 0';
+      return 'M ' + (that.x + ((i-1)%2*(-7) - 15/2)*that.scaleFactor)+' '+ (that.y + ((i-1) * 5 - 25/2)*that.scaleFactor) + ' l '+(d*that.scaleFactor)+' 0';
     })
     .attr("transform", "rotate("+(that.rotation/Math.PI*180)+" "+ that.x +", "+ that.y+")")
     .attr("class", "zap-line component");

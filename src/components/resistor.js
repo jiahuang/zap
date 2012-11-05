@@ -14,7 +14,7 @@ Resistor.prototype.toJSON = function () {
     id: this.id,
     x: this.x,
     y: this.y,
-    scale: this.scale,
+    // scale: this.scale,
     rotation: this.rotation,
     resistance: this.resistance,
     in: this.in.toJSON(),
@@ -52,9 +52,9 @@ Resistor.prototype.render = function (svg) {
     .attr('d', function(d) {
       var path = ' ';
       pathData.forEach(function (point, index) {
-        path += 'l '+point.x*that.scale + ' '+point.y*that.scale + ' ';
+        path += 'l '+point.x*that.scaleFactor + ' '+point.y*that.scaleFactor + ' ';
       })
-      return 'M ' +( that.x ) +' '+ (that.y - (35/2)*that.scale ) + path;
+      return 'M ' +( that.x ) +' '+ (that.y - (35/2)*that.scaleFactor ) + path;
     })
     .attr("transform", "rotate("+(that.rotation/Math.PI*180)+" "+ that.x +", "+ that.y+")")
     .attr("class", "zap-line component");

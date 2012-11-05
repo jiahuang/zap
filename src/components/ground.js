@@ -12,7 +12,7 @@ Ground.prototype.toJSON = function () {
     id: this.id,
     x: this.x,
     y: this.y,
-    scale: this.scale,
+    // scale: this.scale,
     rotation: this.rotation,
     in: this.in.toJSON()
   };
@@ -43,9 +43,9 @@ Ground.prototype.render = function (svg) {
     .append('svg:path')
     .attr('d', function(d, i) {
       if (i == 0) {
-        return 'M ' +( that.x )+' '+(that.y - 12.5*that.scale)+ ' l 0 '+ (d*that.scale);
+        return 'M ' +( that.x )+' '+(that.y - 12.5*that.scaleFactor)+ ' l 0 '+ (d*that.scaleFactor);
       }
-      return 'M ' + (that.x + ((i-1)*5 - 15)*that.scale)+' '+ (that.y + ((i-1) * 5 -2.5)*that.scale) + ' l '+(d*that.scale)+' 0';
+      return 'M ' + (that.x + ((i-1)*5 - 15)*that.scaleFactor)+' '+ (that.y + ((i-1) * 5 -2.5)*that.scaleFactor) + ' l '+(d*that.scaleFactor)+' 0';
     })
     .attr("transform", "rotate("+(this.rotation/Math.PI*180)+" "+ this.x +", "+ this.y +")")
     .attr("class", "zap-line component");
