@@ -67,14 +67,9 @@
       wireArray.push(zap.connect(resistor1.out, opAmp.vPos));
       wireArray.push(zap.connect(opAmp.vNeg, ground.in));
       wireArray.push(zap.connect(opAmp.vPos, resistor2.out));
-      wireArray.push(zap.connect(resistor2.in, capacitor.in));
+      wireArray.push(zap.connect(capacitor.in, resistor2.in));
       wireArray.push(zap.connect(capacitor.out, resistor2.out));
-      wireArray.push(zap.connect(resistor2.in, opAmp.vOut));
-
-      wireArray[1].intersect(70, 130);
-      wireArray[2].intersect(83, 120);
-      wireArray[5].intersect(117, 125);
-      wireArray[5].intersect(130, 125);
+      wireArray.push(zap.connect(opAmp.vOut, resistor2.in));
 
       resistor1.rotateLeft();
       resistor2.rotateRight();
@@ -105,13 +100,8 @@
       wireArray.push(zap.connect(capacitor.out, resistor1.in));
       wireArray.push(zap.connect(opAmp.vNeg, ground.in));
       wireArray.push(zap.connect(resistor1.out, opAmp.vPos));
-      wireArray.push(zap.connect(resistor2.in, opAmp.vPos));
-      wireArray.push(zap.connect(resistor2.out, opAmp.vOut));
-
-      wireArray[1].intersect(70, 110);
-      wireArray[3].intersect(83, 100);
-      wireArray[4].intersect(117.5, 105);
-      wireArray[4].intersect(130, 105);
+      wireArray.push(zap.connect(opAmp.vPos, resistor2.in));
+      wireArray.push(zap.connect(opAmp.vOut, resistor2.out));
 
       resistor1.rotateLeft();
       resistor2.rotateLeft();

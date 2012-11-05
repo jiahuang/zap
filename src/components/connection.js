@@ -26,7 +26,7 @@ Connection.prototype.place = function (x, y, xOffset, yOffset) {
 }
 
 Connection.prototype.scale = function (scaleFactor) {
-  this.x = this.x + this.xOffset * scaleFactor;
-  this.y = this.y + this.yOffset * scaleFactor;
-  console.log("scaling", this.xOffset, this.yOffset);
+  return {x: this.x + this.xOffset * scaleFactor, 
+    y: this.y + this.yOffset * scaleFactor};
+  // console.log("scaling", this.xOffset, this.yOffset);
 }
